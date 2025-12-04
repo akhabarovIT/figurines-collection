@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Моя коллекция фигурок</title>
+    <style>
+        :root {
+            --primary: #6a5af9;
+            --light: #f5f7ff;
+            --dark: #2d3748;
+            --danger: #e53e3e;
+            --success: #38a169;
+            --shipping: #10b981;
+            --received: #4a5568;
+        }
+        * {
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        body {
+            background-color: #f8fafc;
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, var(--primary), #8b75d6);
+            color: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin: 0;
+            font-weight: 600;
+        }
+        .header-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+        .header-actions button {
+            background: rgba(255,255,255,0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+        .header-actions button:hover {
+            background: rgba(255,255,255,0.3);
+        }
+        
+        /* Статистика */
+        .stats-bar {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .stat-item {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+        .stat-label {
+            font-size: 13px;
+            color: #718096;
+            margin-top: 2px;
+        }
+        
+        /* Фильтры и поиск */
+        .controls-bar {
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .search-box {
+            flex: 1;
+            min-width: 200px;
+            position: relative;
+        }
+        .search-box input {
+            width: 100%;
+            padding: 10px 38px 10px 38px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+        .search-icon {
+            position: absolute;
+            left: 12px;
+            top: 50%;
+            transform: translateY(-40%);
+            color: #a0aec0;
+        }
+        .clear-icon {
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #a0aec0;
+            cursor: pointer;
+            padding: 4px;
+        }
+        .filter-group {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+        .filter-btn {
+            padding: 8px 16px;
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.2s;
+            color: var(--dark);
+        }
+        .filter-btn:hover {
+            background: var(--light);
+            border-color: var(--primary);
+        }
+        .filter-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        .container {
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 25px;
+        }
+        @media (max-width: 968px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+        .form-section {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        .form-group {
+            margin-bottom: 18px;
+        }
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        input, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            font-size: 15px;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(106, 90, 249, 0.2);
+        }
+        button {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: background 0.2s;
+        }
+        button:hover {
+            background: #5a4ae3;
+        }
+        .btn-full {
+            width: 100%;
+        }
+        .btn-danger {
+            background: var(--danger);
+        }
+        .btn-danger:hover {
+            background: #c53030;
+        }
+        .btn-success {
+            background: var(--success);
+        }
+        .btn-success:hover {
+            background: #2f855a;
+        }
+        
+        /* Список фигурок */
+        .figurines-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+        .figurine-item {
+			background: white;
+			border-radius: 12px;
+			padding: 16px;
+			box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+			display: grid;
+			grid-template-columns: 120px 1fr auto; /* фото | инфо | действия */
+			gap: 16px;
+			align-items: flex-start; /* чтобы кнопки были сверху */
+			position: relative;
+			border: 3px solid transparent;
+			cursor: pointer;
+		}
+        .figurine-item:hover {
+            transform: translateX(4px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .figurine-item.shipping {
+			border-color: var(--shipping);
+			background: linear-gradient(
+				to right,
+				rgba(16, 185, 129, 0.15) 0%,
+				white 50%
+			);
+		}
+
+        .figurine-item.received {
+            border-color: var(--received);
+            background: linear-gradient(to right, #e2e8f0 0%, white 30%);
+        }
+        .figurine-item.received .figurine-info,
+        .figurine-item.received .figurine-photo {
+            opacity: 0.6;
+        }
+        .figurine-item.disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        .figurine-item.disabled .checkbox-container {
+            pointer-events: auto;
+        }
+        .checkbox-container {
+			margin-right: 6px;
+		}
+        .figurine-photo {
+            width: 120px;
+            height: 120px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #a0aec0;
+            font-size: 12px;
+            text-align: center;
+        }
+        .figurine-info {
+			display: flex;
+			flex-direction: column;
+			justify-content: flex-start;
+		}
+        .figurine-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 8px;
+            color: var(--dark);
+        }
+        .figurine-date {
+            color: #718096;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+        .price-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        .price-tag {
+            background: var(--light);
+            padding: 4px 10px;
+            border-radius: 16px;
+            font-size: 13px;
+        }
+        .price-tag strong {
+            color: var(--primary);
+        }
+        
+        /* Кнопки действий при hover */
+        .figurine-actions {
+			display: flex;
+			gap: 6px;
+			align-items: center;
+			justify-content: flex-end;
+		}
+        .icon-btn {
+			width: 32px;
+			height: 32px;
+			border-radius: 6px;
+			background: white;
+			border: 1px solid #e2e8f0;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			cursor: pointer;
+			transition: all 0.2s;
+			box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+			padding: 0;
+		}
+		.icon-btn svg {
+			color: var(--dark); /* чёрные иконки */
+		}
+		.icon-btn:hover {
+			transform: scale(1.1);
+			background: #f7fafc; /* лёгкий серый при наведении */
+		}
+		
+		.figurine-actions,
+		.checkbox-container {
+			opacity: 0;
+			pointer-events: none;
+			transition: opacity 0.2s ease;
+		}
+
+		.figurine-item:hover .figurine-actions,
+		.figurine-item:hover .checkbox-container {
+			opacity: 1;
+			pointer-events: auto;
+		}
+        
+        /* Модальное окно редактирования */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .modal-overlay.active {
+            display: flex;
+        }
+        .modal {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        .modal h2 {
+            margin: 0 0 20px;
+            color: var(--dark);
+        }
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .modal-actions button {
+            flex: 1;
+        }
+        
+        .empty-state {
+            background: white;
+            border-radius: 12px;
+            padding: 60px 40px;
+            text-align: center;
+            color: #718096;
+        }
+        
+        /* Загрузка изображений */
+        .image-upload-area {
+            border: 2px dashed #cbd5e0;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            min-height: 120px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .image-upload-area:hover {
+            border-color: var(--primary);
+            background-color: #f0f4ff;
+        }
+        .image-upload-area.drag-over {
+            background-color: #e6eaf9;
+            border-color: var(--primary);
+        }
+        .image-preview {
+            width: 100%;
+            height: 120px;
+            object-fit: contain;
+            display: none;
+            margin-top: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            background: #f8fafc;
+        }
+        .upload-text {
+            font-size: 14px;
+            color: #4a5568;
+            margin: 8px 0;
+        }
+        .upload-hint {
+            color: #a0aec0;
+            font-size: 12px;
+        }
+        .image-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+        .image-buttons button {
+            flex: 1;
+            padding: 8px 12px;
+            font-size: 13px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: var(--success);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: slideIn 0.3s ease;
+            z-index: 1000;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(400px);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .figurine-item {
+                grid-template-columns: auto 1fr auto;
+                text-align: left;
+            }
+            .figurine-photo {
+                margin: 0;
+            }
+            .header-actions {
+                flex-direction: column;
+            }
+            .header-actions button {
+                width: 100%;
+            }
+            .stats-bar {
+                gap: 15px;
+            }
+            .figurine-actions {
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Моя коллекция фигурок</h1>
+        <p>Управление предзаказами с отслеживанием доставки</p>
+        <div class="header-actions">
+            <button id="exportBtn">Сохранить в файл</button>
+            <button id="importBtn">Загрузить из файла</button>
+        </div>
+    </header>
+
+    <!-- Статистика -->
+    <div class="stats-bar" id="statsBar"></div>
+
+    <!-- Поиск и фильтры -->
+    <div class="controls-bar">
+        <div class="search-box">
+            <span class="search-icon">
+			  <svg width="16" height="16" viewBox="0 0 24 24" 
+				   fill="none" stroke="currentColor" stroke-width="2" 
+				   stroke-linecap="round" stroke-linejoin="round">
+				<circle cx="11" cy="11" r="8"></circle>
+				<line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+			  </svg>
+			</span>
+            <input type="text" id="searchInput" placeholder="Поиск по названию...">
+            <span class="clear-icon" id="clearSearch">×</span>
+        </div>
+        <div class="filter-group">
+            <span style="font-size: 13px; color: #718096;">Показать:</span>
+            <button class="filter-btn active" data-filter="all">Все</button>
+            <button class="filter-btn" data-filter="shipping">В пути</button>
+            <button class="filter-btn" data-filter="waiting">Ожидание</button>
+            <button class="filter-btn" data-filter="received">Получено</button>
+        </div>
+        <select id="sortSelect" style="width: auto; padding: 8px 12px; font-size: 13px;">
+            <option value="date-added">По дате добавления (новые)</option>
+            <option value="date-added-rev">По дате добавления (старые)</option>
+            <option value="name-asc">По имени А-Я</option>
+            <option value="name-desc">По имени Я-А</option>
+        </select>
+    </div>
+
+    <div class="container">
+        <div class="figurines-list" id="figurinesList"></div>
+
+        <div class="form-section">
+            <h2>➕ Добавить фигурку</h2>
+            
+            <div class="form-group">
+                <label>Фото</label>
+                <div class="image-upload-area" id="uploadArea">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                        <path d="M4 16L8.586 11.414C9.367 10.633 10.633 10.633 11.414 11.414L16 16M14 14L15.586 12.414C16.367 11.633 17.633 11.633 18.414 12.414L20 14M14 8H14.01M6 20H18C19.105 20 20 19.105 20 18V6C20 4.895 19.105 4 18 4H6C4.895 4 4 4.895 4 6V18C4 19.105 4.895 20 6 20Z" stroke="#cbd5e0" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                    <p class="upload-text">Перетащите или вставьте</p>
+                    <p class="upload-hint">Ctrl+V для вставки из буфера</p>
+                    <img class="image-preview" id="preview">
+                    <div class="image-buttons">
+                        <button type="button" id="pasteBtn">Вставить</button>
+                        <button type="button" id="fileBtn">Файл</button>
+                    </div>
+                </div>
+                <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            </div>
+            
+            <div class="form-group">
+                <label>Название*</label>
+                <input type="text" id="name" required placeholder="Fatui Harbingers Chibi...">
+            </div>
+            
+            <div class="form-group">
+                <label>Дата заказа*</label>
+                <input type="date" id="orderDate" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Предоплата (₽)</label>
+                <input type="number" id="prepayment" placeholder="1510">
+            </div>
+            
+            <div class="form-group">
+                <label>Полная оплата (₽)</label>
+                <input type="number" id="payment" placeholder="9990">
+            </div>
+            
+            <div class="form-group">
+                <label>Доставка до Москвы (₽)</label>
+                <input type="number" id="deliveryMoscow" placeholder="300">
+            </div>
+            
+            <div class="form-group">
+                <label>Доставка до дома (₽)</label>
+                <input type="number" id="deliveryHome" placeholder="150">
+            </div>
+            
+            <button class="btn-full" id="addBtn">Добавить</button>
+            <button class="btn-full btn-danger" id="resetBtn" style="margin-top: 10px;">Очистить всё</button>
+        </div>
+    </div>
+
+    <!-- Модальное окно редактирования -->
+    <div class="modal-overlay" id="editModal">
+        <div class="modal">
+            <h2>Редактировать информацию</h2>
+            
+            <div class="form-group">
+                <label>Название*</label>
+                <input type="text" id="editName" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Дата заказа*</label>
+                <input type="date" id="editOrderDate" required>
+            </div>
+            
+            <div class="form-group">
+                <label>Предоплата (₽)</label>
+                <input type="number" id="editPrepayment">
+            </div>
+            
+            <div class="form-group">
+                <label>Полная оплата (₽)</label>
+                <input type="number" id="editPayment">
+            </div>
+            
+            <div class="form-group">
+                <label>Доставка до Москвы (₽)</label>
+                <input type="number" id="editDeliveryMoscow">
+            </div>
+            
+            <div class="form-group">
+                <label>Доставка до дома (₽)</label>
+                <input type="number" id="editDeliveryHome">
+            </div>
+            
+            <div class="modal-actions">
+                <button class="btn-success" id="saveEditBtn">Сохранить</button>
+                <button style="background: #718096;" id="cancelEditBtn">Отмена</button>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="importFileInput" accept=".json" style="display: none;">
+
+    <script>
+        // Хранилище
+        let figurines = [];
+        let currentImage = null;
+        let editingIndex = null;
+        let currentFilter = 'all';
+        let currentSort = 'date-added';
+        let searchQuery = '';
+        
+        // Элементы
+        const list = document.getElementById('figurinesList');
+        const uploadArea = document.getElementById('uploadArea');
+        const preview = document.getElementById('preview');
+        const fileInput = document.getElementById('fileInput');
+        const importFileInput = document.getElementById('importFileInput');
+        const editModal = document.getElementById('editModal');
+        const searchInput = document.getElementById('searchInput');
+        const sortSelect = document.getElementById('sortSelect');
+        const clearSearch = document.getElementById('clearSearch');
+        
+        // Инициализация даты
+        document.getElementById('orderDate').valueAsDate = new Date();
+        
+        // Уведомления
+        function showNotification(message) {
+            const notif = document.createElement('div');
+            notif.className = 'notification';
+            notif.textContent = message;
+            document.body.appendChild(notif);
+            setTimeout(() => notif.remove(), 3000);
+        }
+        
+        // Статистика
+        function updateStats() {
+            const total = figurines.length;
+            const shipping = figurines.filter(f => f.shipping).length;
+            const received = figurines.filter(f => f.received).length;
+            const totalCost = figurines.reduce((sum, f) => {
+                const prep = parseFloat(f.prepayment) || 0;
+                const pay = parseFloat(f.payment) || 0;
+                const delM = parseFloat(f.deliveryMoscow) || 0;
+                const delH = parseFloat(f.deliveryHome) || 0;
+                return sum + prep + pay + delM + delH;
+            }, 0);
+            
+            document.getElementById('statsBar').innerHTML = `
+                <div class="stat-item">
+                    <div class="stat-value">${total}</div>
+                    <div class="stat-label">Всего фигурок</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" style="color: var(--shipping);">${shipping}</div>
+                    <div class="stat-label">В пути</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value" style="color: var(--received);">${received}</div>
+                    <div class="stat-label">Получено</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">${totalCost.toLocaleString('ru-RU')} ₽</div>
+                    <div class="stat-label">Общая сумма</div>
+                </div>
+            `;
+        }
+        
+        // Фильтрация и сортировка
+        function getFilteredFigurines() {
+            let filtered = [...figurines];
+            
+            // Фильтр по статусу
+            if (currentFilter === 'shipping') {
+                filtered = filtered.filter(f => f.shipping && !f.received);
+            } else if (currentFilter === 'waiting') {
+                filtered = filtered.filter(f => !f.shipping && !f.received);
+            } else if (currentFilter === 'received') {
+                filtered = filtered.filter(f => f.received);
+            }
+            
+            // Поиск
+            if (searchQuery) {
+                filtered = filtered.filter(f => 
+                    f.name.toLowerCase().includes(searchQuery.toLowerCase())
+                );
+            }
+            
+            // Сортировка
+            filtered.sort((a, b) => {
+			switch(currentSort) {
+				case 'date-added':
+					// новые (сначала свежие даты)
+					return new Date(b.orderDate) - new Date(a.orderDate);
+				case 'date-added-rev':
+					// старые (сначала самые ранние даты)
+					return new Date(a.orderDate) - new Date(b.orderDate);
+				case 'name-asc':
+					return a.name.localeCompare(b.name);
+				case 'name-desc':
+					return b.name.localeCompare(a.name);
+			}
+		});
+            
+            return filtered;
+        }
+        
+        // Рендеринг
+        function render() {
+            updateStats();
+            const filtered = getFilteredFigurines();
+            
+            if (!filtered.length) {
+			let title = '';
+			let subtitle = '';
+
+			if (searchQuery) {
+				title = 'Ничего не найдено';
+				subtitle = 'Попробуйте изменить запрос или фильтр';
+			} else {
+				switch (currentFilter) {
+					case 'shipping':
+						title = 'Нет фигурок в пути';
+						subtitle = 'Нажмите на карточку фигурки, чтобы отметить её как «В пути».';
+						break;
+					case 'waiting':
+						title = 'Нет ожидающих фигурок';
+						subtitle = 'Добавьте новую фигурку через форму справа или снимите отметку «В пути/Получено».';
+						break;
+					case 'received':
+						title = 'Отсутствуют полученные фигурки';
+						subtitle = 'Активируйте чек-бокс у фигурки, чтобы она перешла в статус «Получено».';
+						break;
+					default:
+						title = 'Коллекция пуста';
+						subtitle = 'Добавьте первую фигурку через форму справа.';
+				}
+			}
+
+			list.innerHTML = `
+				<div class="empty-state">
+					<h3>${title}</h3>
+					<p>${subtitle}</p>
+				</div>
+			`;
+			return;
+		}
+            
+            list.innerHTML = filtered.map(fig => {
+                const idx = figurines.indexOf(fig);
+                return `
+                    <div class="figurine-item ${fig.shipping ? 'shipping' : ''} ${fig.received ? 'received' : ''}" data-index="${idx}">
+                        <div class="figurine-photo">
+							${fig.photo ? `<img src="${fig.photo}" style="width:100%;height:100%;object-fit:cover;border-radius:8px;">` : 'Нет фото'}
+						</div>
+						<div class="figurine-info">
+							<h3 class="figurine-name">${fig.name}</h3>
+							<div class="figurine-date">📅 ${formatDate(fig.orderDate)}</div>
+							<div class="price-tags">
+								${fig.prepayment ? `<span class="price-tag">Предоплата: <strong>${fig.prepayment}₽</strong></span>` : ''}
+								${fig.payment ? `<span class="price-tag">Оплата: <strong>${fig.payment}₽</strong></span>` : ''}
+								${fig.deliveryMoscow ? `<span class="price-tag">До Москвы: <strong>${fig.deliveryMoscow}₽</strong></span>` : ''}
+								${fig.deliveryHome ? `<span class="price-tag">До дома: <strong>${fig.deliveryHome}₽</strong></span>` : ''}
+							</div>
+						</div>
+						<div class="figurine-actions">
+							<div class="checkbox-container">
+								<input type="checkbox" class="received-checkbox" ${fig.received ? 'checked' : ''} onchange="toggleReceived(${idx})">
+							</div>
+							<button class="icon-btn edit" onclick="openEdit(${idx}); event.stopPropagation();">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
+                                    <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
+                                </svg>
+                            </button>
+                            <button class="icon-btn delete" onclick="deleteFigurine(${idx}); event.stopPropagation();">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <polyline points="3 6 5 6 21 6"></polyline>
+                                    <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                                    <line x1="10" y1="11" x2="10" y2="17"></line>
+                                    <line x1="14" y1="11" x2="14" y2="17"></line>
+                                </svg>
+                            </button>
+						</div>
+                    </div>
+                `;
+            }).join('');
+            
+            // Добавляем обработчики кликов
+            document.querySelectorAll('.figurine-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    if (e.target.closest('.icon-btn') || e.target.closest('.received-checkbox')) return;
+                    const idx = parseInt(item.dataset.index);
+                    toggleShipping(idx);
+                });
+            });
+        }
+        
+        function formatDate(str) {
+            return new Date(str).toLocaleDateString('ru-RU');
+        }
+        
+        function clearForm() {
+            document.getElementById('name').value = '';
+            document.getElementById('prepayment').value = '';
+            document.getElementById('payment').value = '';
+            document.getElementById('deliveryMoscow').value = '';
+            document.getElementById('deliveryHome').value = '';
+            preview.style.display = 'none';
+            uploadArea.querySelector('.upload-text').textContent = 'Перетащите или вставьте';
+            currentImage = null;
+        }
+        
+        // Переключение статуса "в пути"
+        function toggleShipping(idx) {
+            if (figurines[idx].received) return;
+            figurines[idx].shipping = !figurines[idx].shipping;
+            render();
+        }
+        
+        // Переключение статуса "получено"
+        window.toggleReceived = (idx) => {
+            const checkbox = event.target;
+            figurines[idx].received = checkbox.checked;
+            if (figurines[idx].received) {
+                figurines[idx].shipping = false;
+            }
+            render();
+        };
+        
+        // Редактирование
+        window.openEdit = (idx) => {
+            if (figurines[idx].received) return;
+            editingIndex = idx;
+            const fig = figurines[idx];
+            
+            document.getElementById('editName').value = fig.name;
+            document.getElementById('editOrderDate').value = fig.orderDate;
+            document.getElementById('editPrepayment').value = fig.prepayment || '';
+            document.getElementById('editPayment').value = fig.payment || '';
+            document.getElementById('editDeliveryMoscow').value = fig.deliveryMoscow || '';
+            document.getElementById('editDeliveryHome').value = fig.deliveryHome || '';
+            
+            editModal.classList.add('active');
+        };
+        
+        document.getElementById('saveEditBtn').onclick = () => {
+            if (editingIndex === null) return;
+            
+            const name = document.getElementById('editName').value.trim();
+            if (!name) {
+                alert('Введите название');
+                return;
+            }
+            
+            figurines[editingIndex] = {
+                ...figurines[editingIndex],
+                name,
+                orderDate: document.getElementById('editOrderDate').value,
+                prepayment: document.getElementById('editPrepayment').value,
+                payment: document.getElementById('editPayment').value,
+                deliveryMoscow: document.getElementById('editDeliveryMoscow').value,
+                deliveryHome: document.getElementById('editDeliveryHome').value
+            };
+            
+            editModal.classList.remove('active');
+            render();
+            showNotification('✓ Изменения сохранены');
+        };
+        
+        document.getElementById('cancelEditBtn').onclick = () => {
+            editModal.classList.remove('active');
+        };
+        
+        editModal.onclick = (e) => {
+            if (e.target === editModal) {
+                editModal.classList.remove('active');
+            }
+        };
+        
+        // Фильтры
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentFilter = btn.dataset.filter;
+                render();
+            });
+        });
+        
+        // Поиск
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value;
+            render();
+        });
+        
+        // Очистка поиска
+        clearSearch.addEventListener('click', () => {
+            searchInput.value = '';
+            searchQuery = '';
+            render();
+        });
+        
+        // Сортировка
+        sortSelect.addEventListener('change', (e) => {
+            currentSort = e.target.value;
+            render();
+        });
+        
+        // Загрузка изображений
+        function processImage(file) {
+            if (!file?.type.startsWith('image/')) {
+                alert('Выберите изображение');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = e => {
+                currentImage = e.target.result;
+                preview.src = currentImage;
+                preview.style.display = 'block';
+                uploadArea.querySelector('.upload-text').textContent = '✓ Загружено';
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        document.getElementById('fileBtn').onclick = () => fileInput.click();
+        fileInput.onchange = e => e.target.files[0] && processImage(e.target.files[0]);
+        
+        document.getElementById('pasteBtn').onclick = async () => {
+            try {
+                const items = await navigator.clipboard.read();
+                for (const item of items) {
+                    for (const type of item.types) {
+                        if (type.startsWith('image/')) {
+                            const blob = await item.getType(type);
+                            processImage(new File([blob], 'image.png', { type: blob.type }));
+                            return;
+                        }
+                    }
+                }
+                alert('В буфере нет изображения');
+            } catch (err) {
+                alert('Не удалось прочитать буфер');
+            }
+        };
+        
+        uploadArea.ondragover = e => {
+            e.preventDefault();
+            uploadArea.classList.add('drag-over');
+        };
+        uploadArea.ondragleave = () => uploadArea.classList.remove('drag-over');
+        uploadArea.ondrop = e => {
+            e.preventDefault();
+            uploadArea.classList.remove('drag-over');
+            e.dataTransfer.files[0] && processImage(e.dataTransfer.files[0]);
+        };
+        
+        document.onpaste = e => {
+            if (document.activeElement.tagName === 'INPUT') return;
+            for (const item of e.clipboardData.items) {
+                if (item.type.startsWith('image/')) {
+                    processImage(item.getAsFile());
+                    return;
+                }
+            }
+        };
+        
+        // Добавление
+        document.getElementById('addBtn').onclick = () => {
+            const name = document.getElementById('name').value.trim();
+            const orderDate = document.getElementById('orderDate').value;
+            
+            if (!name || !orderDate) {
+                alert('Заполните обязательные поля');
+                return;
+            }
+            
+            figurines.push({
+                id: Date.now(),
+                name,
+                photo: currentImage,
+                orderDate,
+                prepayment: document.getElementById('prepayment').value,
+                payment: document.getElementById('payment').value,
+                deliveryMoscow: document.getElementById('deliveryMoscow').value,
+                deliveryHome: document.getElementById('deliveryHome').value,
+                shipping: false,
+                received: false
+            });
+            
+            clearForm();
+            render();
+            showNotification('✓ Фигурка добавлена!');
+        };
+        
+        // Удаление
+        window.deleteFigurine = idx => {
+            if (confirm(`Удалить "${figurines[idx].name}"?`)) {
+                figurines.splice(idx, 1);
+                render();
+                showNotification('✓ Фигурка удалена');
+            }
+        };
+        
+        document.getElementById('resetBtn').onclick = () => {
+            if (confirm('Удалить ВСЕ фигурки?')) {
+                figurines = [];
+                render();
+                showNotification('✓ Все данные удалены');
+            }
+        };
+        
+        // Экспорт/Импорт
+        document.getElementById('exportBtn').onclick = () => {
+            if (!figurines.length) {
+                alert('Нечего сохранять');
+                return;
+            }
+            
+            const dataStr = JSON.stringify(figurines, null, 2);
+            const blob = new Blob([dataStr], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `figurines_${new Date().toISOString().split('T')[0]}.json`;
+            a.click();
+            URL.revokeObjectURL(url);
+            showNotification('✓ Файл сохранён!');
+        };
+        
+        document.getElementById('importBtn').onclick = () => importFileInput.click();
+        
+        importFileInput.onchange = e => {
+            const file = e.target.files[0];
+            if (!file) return;
+            
+            const reader = new FileReader();
+            reader.onload = event => {
+                try {
+                    const data = JSON.parse(event.target.result);
+                    if (!Array.isArray(data)) {
+                        alert('Неверный формат файла');
+                        return;
+                    }
+                    
+                    if (figurines.length > 0) {
+                        if (!confirm(`Заменить ${figurines.length} фигурок загруженными данными?`)) {
+                            return;
+                        }
+                    }
+                    
+                    figurines = data;
+                    render();
+                    showNotification(`✓ Загружено ${figurines.length} фигурок!`);
+                } catch (err) {
+                    alert('Ошибка чтения файла');
+                }
+            };
+            reader.readAsText(file);
+            importFileInput.value = '';
+        };
+        
+        // Инициализация
+        render();
+    </script>
+</body>
+</html>
