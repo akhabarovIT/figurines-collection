@@ -641,7 +641,6 @@
     <input type="file" id="importFileInput" accept=".json" style="display: none;">
 
     <script>
-        // Хранилище
         let figurines = [];
         let currentImage = null;
         let editingIndex = null;
@@ -649,7 +648,6 @@
         let currentSort = 'date-added';
         let searchQuery = '';
         
-        // Элементы
         const list = document.getElementById('figurinesList');
         const uploadArea = document.getElementById('uploadArea');
         const preview = document.getElementById('preview');
@@ -660,10 +658,8 @@
         const sortSelect = document.getElementById('sortSelect');
         const clearSearch = document.getElementById('clearSearch');
         
-        // Инициализация даты
         document.getElementById('orderDate').valueAsDate = new Date();
         
-        // Уведомления
         function showNotification(message) {
             const notif = document.createElement('div');
             notif.className = 'notification';
@@ -672,7 +668,6 @@
             setTimeout(() => notif.remove(), 3000);
         }
         
-        // Статистика
         function updateStats() {
             const total = figurines.length;
             const shipping = figurines.filter(f => f.shipping).length;
@@ -705,11 +700,9 @@
             `;
         }
         
-        // Фильтрация и сортировка
         function getFilteredFigurines() {
             let filtered = [...figurines];
             
-            // Фильтр по статусу
             if (currentFilter === 'shipping') {
                 filtered = filtered.filter(f => f.shipping && !f.received);
             } else if (currentFilter === 'waiting') {
@@ -717,22 +710,18 @@
             } else if (currentFilter === 'received') {
                 filtered = filtered.filter(f => f.received);
             }
-            
-            // Поиск
+			
             if (searchQuery) {
                 filtered = filtered.filter(f => 
                     f.name.toLowerCase().includes(searchQuery.toLowerCase())
                 );
             }
             
-            // Сортировка
             filtered.sort((a, b) => {
 			switch(currentSort) {
 				case 'date-added':
-					// новые (сначала свежие даты)
 					return new Date(b.orderDate) - new Date(a.orderDate);
 				case 'date-added-rev':
-					// старые (сначала самые ранние даты)
 					return new Date(a.orderDate) - new Date(b.orderDate);
 				case 'name-asc':
 					return a.name.localeCompare(b.name);
@@ -744,7 +733,6 @@
             return filtered;
         }
         
-        // Рендеринг
         function render() {
             updateStats();
             const filtered = getFilteredFigurines();
@@ -825,7 +813,6 @@
                 `;
             }).join('');
             
-            // Добавляем обработчики кликов
             document.querySelectorAll('.figurine-item').forEach(item => {
                 item.addEventListener('click', (e) => {
                     if (e.target.closest('.icon-btn') || e.target.closest('.received-checkbox')) return;
@@ -850,14 +837,12 @@
             currentImage = null;
         }
         
-        // Переключение статуса "в пути"
         function toggleShipping(idx) {
             if (figurines[idx].received) return;
             figurines[idx].shipping = !figurines[idx].shipping;
             render();
         }
         
-        // Переключение статуса "получено"
         window.toggleReceived = (idx) => {
             const checkbox = event.target;
             figurines[idx].received = checkbox.checked;
@@ -867,7 +852,6 @@
             render();
         };
         
-        // Редактирование
         window.openEdit = (idx) => {
             if (figurines[idx].received) return;
             editingIndex = idx;
@@ -917,7 +901,6 @@
             }
         };
         
-        // Фильтры
         document.querySelectorAll('.filter-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
@@ -927,26 +910,22 @@
             });
         });
         
-        // Поиск
         searchInput.addEventListener('input', (e) => {
             searchQuery = e.target.value;
             render();
         });
         
-        // Очистка поиска
         clearSearch.addEventListener('click', () => {
             searchInput.value = '';
             searchQuery = '';
             render();
         });
         
-        // Сортировка
         sortSelect.addEventListener('change', (e) => {
             currentSort = e.target.value;
             render();
         });
         
-        // Загрузка изображений
         function processImage(file) {
             if (!file?.type.startsWith('image/')) {
                 alert('Выберите изображение');
@@ -1005,7 +984,6 @@
             }
         };
         
-        // Добавление
         document.getElementById('addBtn').onclick = () => {
             const name = document.getElementById('name').value.trim();
             const orderDate = document.getElementById('orderDate').value;
@@ -1033,7 +1011,6 @@
             showNotification('✓ Фигурка добавлена!');
         };
         
-        // Удаление
         window.deleteFigurine = idx => {
             if (confirm(`Удалить "${figurines[idx].name}"?`)) {
                 figurines.splice(idx, 1);
@@ -1050,7 +1027,6 @@
             }
         };
         
-        // Экспорт/Импорт
         document.getElementById('exportBtn').onclick = () => {
             if (!figurines.length) {
                 alert('Нечего сохранять');
@@ -1100,7 +1076,6 @@
             importFileInput.value = '';
         };
         
-        // Инициализация
         render();
     </script>
 </body>
