@@ -55,8 +55,6 @@
         .header-actions button:hover {
             background: rgba(255,255,255,0.3);
         }
-        
-        /* Статистика */
         .stats-bar {
             background: white;
             padding: 15px 20px;
@@ -82,7 +80,6 @@
             margin-top: 2px;
         }
         
-        /* Фильтры и поиск */
         .controls-bar {
             background: white;
             padding: 15px 20px;
@@ -215,8 +212,6 @@
         .btn-success:hover {
             background: #2f855a;
         }
-        
-        /* Список фигурок */
         .figurines-list {
             display: flex;
             flex-direction: column;
@@ -228,9 +223,9 @@
 			padding: 16px;
 			box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 			display: grid;
-			grid-template-columns: 120px 1fr auto; /* фото | инфо | действия */
+			grid-template-columns: 120px 1fr auto;
 			gap: 16px;
-			align-items: flex-start; /* чтобы кнопки были сверху */
+			align-items: flex-start;
 			position: relative;
 			border: 3px solid transparent;
 			cursor: pointer;
@@ -309,8 +304,6 @@
         .price-tag strong {
             color: var(--primary);
         }
-        
-        /* Кнопки действий при hover */
         .figurine-actions {
 			display: flex;
 			gap: 6px;
@@ -332,11 +325,11 @@
 			padding: 0;
 		}
 		.icon-btn svg {
-			color: var(--dark); /* чёрные иконки */
+			color: var(--dark);
 		}
 		.icon-btn:hover {
 			transform: scale(1.1);
-			background: #f7fafc; /* лёгкий серый при наведении */
+			background: #f7fafc;
 		}
 		
 		.figurine-actions,
@@ -351,8 +344,6 @@
 			opacity: 1;
 			pointer-events: auto;
 		}
-        
-        /* Модальное окно редактирования */
         .modal-overlay {
             display: none;
             position: fixed;
@@ -399,8 +390,6 @@
             text-align: center;
             color: #718096;
         }
-        
-        /* Загрузка изображений */
         .image-upload-area {
             border: 2px dashed #cbd5e0;
             border-radius: 8px;
@@ -545,7 +534,7 @@
         <div class="figurines-list" id="figurinesList"></div>
 
         <div class="form-section">
-            <h2>➕ Добавить фигурку</h2>
+            <h2>Добавить фигурку</h2>
             
             <div class="form-group">
                 <label>Фото</label>
