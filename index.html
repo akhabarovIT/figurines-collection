@@ -57,21 +57,19 @@
             background: rgba(255,255,255,0.3);
         }
         .stats-bar {
-			background: white;
-			padding: 15px 20px;
-			border-radius: 10px;
-			margin-bottom: 20px;
-			display: flex;
-			gap: 20px;
-			justify-content: center;
-			flex-wrap: wrap;
-			box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-		}
-
-		.stat-item {
-			flex: 1 1 120px;
-			text-align: center;
-		}
+            background: white;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        .stat-item {
+            text-align: center;
+        }
         .stat-value {
             font-size: 24px;
             font-weight: 700;
@@ -582,6 +580,9 @@
 				height: 100% !important;
 				object-fit: contain !important;
 				object-position: top !important;
+			}
+			.stat-item {
+				flex: 1 1 120px;
 			}
 		}
 
